@@ -1,0 +1,1318 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Orpheus Manga — Python Backend & AI Developer</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Mono:ital,wght@0,300;0,400;0,500;1,300&family=Literata:ital,wght@0,300;0,400;1,300&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0a0a0f;
+    --surface: #111118;
+    --surface2: #16161f;
+    --border: rgba(255,255,255,0.07);
+    --text: #e8e6f0;
+    --muted: #6b6880;
+    --accent: #7c6af7;
+    --accent2: #3de0a0;
+    --accent3: #f5a623;
+    --glow: rgba(124,106,247,0.15);
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'Literata', Georgia, serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.7;
+    overflow-x: hidden;
+  }
+
+  /* ── GRAIN OVERLAY ── */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 1000;
+    opacity: 0.5;
+  }
+
+  /* ── NAV ── */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1.2rem 4rem;
+    background: rgba(10,10,15,0.85);
+    backdrop-filter: blur(20px);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .nav-logo {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: 1.1rem;
+    letter-spacing: -0.02em;
+    color: var(--text);
+    text-decoration: none;
+  }
+  .nav-logo span { color: var(--accent); }
+
+  .nav-links {
+    display: flex;
+    gap: 2.5rem;
+    list-style: none;
+  }
+
+  .nav-links a {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.78rem;
+    color: var(--muted);
+    text-decoration: none;
+    letter-spacing: 0.05em;
+    transition: color 0.2s;
+  }
+  .nav-links a:hover { color: var(--text); }
+
+  .nav-cta {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.78rem;
+    padding: 0.5rem 1.2rem;
+    background: var(--accent);
+    color: #fff;
+    border-radius: 4px;
+    text-decoration: none;
+    letter-spacing: 0.03em;
+    transition: opacity 0.2s;
+  }
+  .nav-cta:hover { opacity: 0.85; }
+
+  /* ── HERO ── */
+  #hero {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 8rem 4rem 4rem;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero-bg-orb {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(120px);
+    pointer-events: none;
+  }
+  .orb1 { width: 600px; height: 600px; background: rgba(124,106,247,0.12); top: -100px; right: -100px; }
+  .orb2 { width: 400px; height: 400px; background: rgba(61,224,160,0.07); bottom: 0; left: -80px; }
+
+  .hero-eyebrow {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.75rem;
+    color: var(--accent2);
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    margin-bottom: 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+  }
+  .hero-eyebrow::before {
+    content: '';
+    display: inline-block;
+    width: 32px;
+    height: 1px;
+    background: var(--accent2);
+  }
+
+  h1 {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(3rem, 7vw, 6.5rem);
+    font-weight: 800;
+    line-height: 1.0;
+    letter-spacing: -0.04em;
+    margin-bottom: 1.5rem;
+    max-width: 900px;
+  }
+
+  h1 .line-muted { color: var(--muted); }
+  h1 .accent-word { color: var(--accent); position: relative; display: inline-block; }
+
+  .hero-sub {
+    font-size: 1.1rem;
+    color: var(--muted);
+    max-width: 520px;
+    line-height: 1.8;
+    margin-bottom: 3rem;
+    font-style: italic;
+  }
+
+  .hero-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.6rem;
+    margin-bottom: 3rem;
+  }
+
+  .chip {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.7rem;
+    padding: 0.3rem 0.8rem;
+    border: 1px solid var(--border);
+    border-radius: 2px;
+    color: var(--muted);
+    letter-spacing: 0.05em;
+    background: var(--surface);
+  }
+  .chip.hi { border-color: rgba(124,106,247,0.4); color: var(--accent); background: rgba(124,106,247,0.06); }
+
+  .hero-actions {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+  }
+
+  .btn-primary {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.82rem;
+    padding: 0.85rem 2rem;
+    background: var(--accent);
+    color: #fff;
+    border-radius: 4px;
+    text-decoration: none;
+    letter-spacing: 0.03em;
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+  .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 30px rgba(124,106,247,0.35); }
+
+  .btn-ghost {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.82rem;
+    padding: 0.85rem 2rem;
+    border: 1px solid var(--border);
+    color: var(--text);
+    border-radius: 4px;
+    text-decoration: none;
+    letter-spacing: 0.03em;
+    transition: border-color 0.2s, background 0.2s;
+  }
+  .btn-ghost:hover { border-color: rgba(255,255,255,0.2); background: var(--surface); }
+
+  .hero-stats {
+    position: absolute;
+    right: 4rem;
+    bottom: 4rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    text-align: right;
+  }
+
+  .stat-item {}
+  .stat-num {
+    font-family: 'Syne', sans-serif;
+    font-size: 2.5rem;
+    font-weight: 800;
+    color: var(--text);
+    line-height: 1;
+  }
+  .stat-num span { color: var(--accent2); }
+  .stat-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.68rem;
+    color: var(--muted);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  /* ── SECTIONS ── */
+  section { padding: 6rem 4rem; }
+
+  .section-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.7rem;
+    color: var(--accent);
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    margin-bottom: 0.8rem;
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+  }
+  .section-label::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+    max-width: 60px;
+  }
+
+  h2 {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(1.8rem, 4vw, 3rem);
+    font-weight: 800;
+    letter-spacing: -0.03em;
+    margin-bottom: 3rem;
+    line-height: 1.1;
+  }
+
+  /* ── ABOUT ── */
+  #about {
+    background: var(--surface);
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .about-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 5rem;
+    align-items: start;
+  }
+
+  .about-text p {
+    color: var(--muted);
+    margin-bottom: 1.2rem;
+    font-size: 1rem;
+  }
+  .about-text strong { color: var(--text); font-style: normal; }
+
+  .about-cgpa {
+    display: inline-flex;
+    align-items: baseline;
+    gap: 0.3rem;
+    background: rgba(61,224,160,0.06);
+    border: 1px solid rgba(61,224,160,0.2);
+    padding: 0.6rem 1.2rem;
+    border-radius: 4px;
+    margin-top: 1rem;
+  }
+  .cgpa-num {
+    font-family: 'Syne', sans-serif;
+    font-size: 2rem;
+    font-weight: 800;
+    color: var(--accent2);
+  }
+  .cgpa-denom {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.85rem;
+    color: var(--muted);
+  }
+  .cgpa-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.7rem;
+    color: var(--muted);
+    letter-spacing: 0.1em;
+    margin-left: 0.5rem;
+  }
+
+  /* ── GRADES TABLE ── */
+  .grades-panel {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    overflow: hidden;
+  }
+
+  .grades-header {
+    padding: 1rem 1.5rem;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .grades-header span {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.72rem;
+    color: var(--muted);
+    letter-spacing: 0.08em;
+  }
+  .grades-header .dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: var(--accent2);
+    display: inline-block;
+    margin-right: 0.5rem;
+    box-shadow: 0 0 8px var(--accent2);
+  }
+
+  .grades-scroll { max-height: 340px; overflow-y: auto; }
+  .grades-scroll::-webkit-scrollbar { width: 3px; }
+  .grades-scroll::-webkit-scrollbar-track { background: transparent; }
+  .grades-scroll::-webkit-scrollbar-thumb { background: var(--border); }
+
+  table { width: 100%; border-collapse: collapse; }
+  th {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.65rem;
+    color: var(--muted);
+    letter-spacing: 0.1em;
+    text-align: left;
+    padding: 0.7rem 1rem;
+    border-bottom: 1px solid var(--border);
+    position: sticky;
+    top: 0;
+    background: var(--surface2);
+  }
+  td {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.72rem;
+    padding: 0.65rem 1rem;
+    border-bottom: 1px solid rgba(255,255,255,0.03);
+    color: var(--text);
+  }
+  tr:last-child td { border-bottom: none; }
+  tr:hover td { background: rgba(255,255,255,0.02); }
+
+  .grade-bar-wrap { display: flex; align-items: center; gap: 0.6rem; }
+  .grade-bar-bg { flex: 1; height: 3px; background: rgba(255,255,255,0.06); border-radius: 2px; }
+  .grade-bar { height: 3px; border-radius: 2px; background: var(--accent); transition: width 1s ease; }
+  .grade-bar.hi { background: var(--accent2); }
+  .grade-num { color: var(--accent2); min-width: 36px; text-align: right; }
+
+  /* ── EXPERIENCE ── */
+  #experience { background: var(--bg); }
+
+  .exp-list { display: flex; flex-direction: column; gap: 0; }
+
+  .exp-item {
+    display: grid;
+    grid-template-columns: 200px 1fr;
+    gap: 2rem;
+    padding: 2.5rem 0;
+    border-bottom: 1px solid var(--border);
+    position: relative;
+  }
+  .exp-item:last-child { border-bottom: none; }
+
+  .exp-date {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.72rem;
+    color: var(--muted);
+    letter-spacing: 0.05em;
+    padding-top: 0.2rem;
+    line-height: 1.5;
+  }
+  .exp-location {
+    font-size: 0.65rem;
+    opacity: 0.6;
+    margin-top: 0.3rem;
+  }
+
+  .exp-role {
+    font-family: 'Syne', sans-serif;
+    font-size: 1.15rem;
+    font-weight: 700;
+    margin-bottom: 0.25rem;
+    color: var(--text);
+  }
+  .exp-company {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.75rem;
+    color: var(--accent);
+    margin-bottom: 1rem;
+    letter-spacing: 0.05em;
+  }
+  .exp-bullets { list-style: none; }
+  .exp-bullets li {
+    font-size: 0.9rem;
+    color: var(--muted);
+    margin-bottom: 0.5rem;
+    padding-left: 1.2rem;
+    position: relative;
+  }
+  .exp-bullets li::before {
+    content: '→';
+    position: absolute;
+    left: 0;
+    color: var(--accent);
+    font-family: 'DM Mono', monospace;
+    font-size: 0.75rem;
+  }
+  .exp-bullets strong { color: var(--accent2); font-style: normal; }
+
+  /* ── PROJECTS ── */
+  #projects { background: var(--surface); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+
+  .projects-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+    gap: 1.5rem;
+  }
+
+  .project-card {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    overflow: hidden;
+    transition: border-color 0.3s, transform 0.3s;
+    position: relative;
+  }
+  .project-card:hover {
+    border-color: rgba(124,106,247,0.4);
+    transform: translateY(-4px);
+  }
+
+  .project-card-top {
+    padding: 1.8rem 1.8rem 1.2rem;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .project-number {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.65rem;
+    color: var(--muted);
+    letter-spacing: 0.1em;
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .project-status {
+    font-size: 0.62rem;
+    padding: 0.2rem 0.6rem;
+    border-radius: 2px;
+    letter-spacing: 0.05em;
+  }
+  .status-live { background: rgba(61,224,160,0.1); color: var(--accent2); border: 1px solid rgba(61,224,160,0.2); }
+  .status-research { background: rgba(245,166,35,0.1); color: var(--accent3); border: 1px solid rgba(245,166,35,0.2); }
+
+  .project-name {
+    font-family: 'Syne', sans-serif;
+    font-size: 1.35rem;
+    font-weight: 800;
+    margin-bottom: 0.6rem;
+    letter-spacing: -0.02em;
+  }
+
+  .project-desc {
+    font-size: 0.88rem;
+    color: var(--muted);
+    line-height: 1.7;
+  }
+
+  .project-card-bottom { padding: 1.2rem 1.8rem; }
+
+  .project-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+    margin-bottom: 1.2rem;
+  }
+  .tag {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.62rem;
+    padding: 0.2rem 0.5rem;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 2px;
+    color: var(--muted);
+    letter-spacing: 0.04em;
+  }
+
+  .project-links { display: flex; gap: 1rem; }
+  .project-link {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.7rem;
+    color: var(--accent);
+    text-decoration: none;
+    letter-spacing: 0.04em;
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+    transition: opacity 0.2s;
+  }
+  .project-link:hover { opacity: 0.7; }
+  .project-link::after { content: '↗'; }
+
+  .project-highlight {
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, var(--accent), var(--accent2));
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+  .project-card:hover .project-highlight { opacity: 1; }
+
+  /* ── SKILLS ── */
+  #skills { background: var(--bg); }
+
+  .skills-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 1.5rem;
+  }
+
+  .skill-group {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 1.5rem;
+  }
+
+  .skill-group-title {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.65rem;
+    color: var(--accent);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    margin-bottom: 1rem;
+    padding-bottom: 0.8rem;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .skill-items { display: flex; flex-wrap: wrap; gap: 0.4rem; }
+  .skill-pill {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.7rem;
+    padding: 0.3rem 0.7rem;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 2px;
+    color: var(--text);
+    transition: border-color 0.2s, color 0.2s;
+  }
+  .skill-pill:hover { border-color: rgba(124,106,247,0.4); color: var(--accent); }
+
+  /* ── CERTIFICATIONS ── */
+  #certs { background: var(--surface); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+
+  .certs-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 1rem;
+  }
+
+  .cert-card {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 1.5rem;
+    transition: border-color 0.2s;
+  }
+  .cert-card:hover { border-color: rgba(124,106,247,0.3); }
+
+  .cert-issuer {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.62rem;
+    color: var(--accent2);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-bottom: 0.6rem;
+  }
+  .cert-name {
+    font-family: 'Syne', sans-serif;
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: var(--text);
+    line-height: 1.4;
+  }
+
+  /* ── ACHIEVEMENT ── */
+  .achievement-banner {
+    margin: 3rem 0 0;
+    background: linear-gradient(135deg, rgba(124,106,247,0.08), rgba(61,224,160,0.05));
+    border: 1px solid rgba(124,106,247,0.2);
+    border-radius: 8px;
+    padding: 2rem;
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+  }
+
+  .achievement-medal {
+    font-size: 3rem;
+    flex-shrink: 0;
+  }
+
+  .achievement-text h3 {
+    font-family: 'Syne', sans-serif;
+    font-size: 1.2rem;
+    font-weight: 800;
+    margin-bottom: 0.3rem;
+  }
+  .achievement-text p {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.75rem;
+    color: var(--muted);
+  }
+
+  /* ── CONTACT ── */
+  #contact { background: var(--bg); }
+
+  .contact-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 5rem;
+    align-items: start;
+  }
+
+  .contact-left h2 { margin-bottom: 1rem; }
+  .contact-left p { color: var(--muted); margin-bottom: 2rem; }
+
+  .contact-links { display: flex; flex-direction: column; gap: 1rem; }
+  .contact-link {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.8rem;
+    color: var(--text);
+    text-decoration: none;
+    padding: 0.8rem 1rem;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    transition: border-color 0.2s, background 0.2s;
+  }
+  .contact-link:hover { border-color: rgba(124,106,247,0.4); background: var(--surface2); }
+  .contact-link-icon { font-size: 1rem; }
+  .contact-link-label { color: var(--muted); font-size: 0.65rem; display: block; }
+
+  .contact-right {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 2.5rem;
+  }
+  .contact-right h3 {
+    font-family: 'Syne', sans-serif;
+    font-size: 1.1rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+  }
+  .contact-right p {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.75rem;
+    color: var(--muted);
+    margin-bottom: 1.5rem;
+  }
+
+  .open-to {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+  }
+  .open-item {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.75rem;
+    color: var(--muted);
+  }
+  .open-item::before {
+    content: '✓';
+    color: var(--accent2);
+    font-size: 0.8rem;
+  }
+
+  /* ── FOOTER ── */
+  footer {
+    padding: 2rem 4rem;
+    border-top: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.68rem;
+    color: var(--muted);
+  }
+
+  /* ── ANIMATIONS ── */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(24px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .hero-eyebrow { animation: fadeUp 0.6s ease both; }
+  h1 { animation: fadeUp 0.6s 0.1s ease both; }
+  .hero-sub { animation: fadeUp 0.6s 0.2s ease both; }
+  .hero-chips { animation: fadeUp 0.6s 0.3s ease both; }
+  .hero-actions { animation: fadeUp 0.6s 0.4s ease both; }
+  .hero-stats { animation: fadeUp 0.6s 0.5s ease both; }
+
+  /* Scroll reveal */
+  .reveal {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.6s ease, transform 0.6s ease;
+  }
+  .reveal.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* ── SCROLLBAR ── */
+  ::-webkit-scrollbar { width: 4px; }
+  ::-webkit-scrollbar-track { background: var(--bg); }
+  ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 900px) {
+    nav { padding: 1rem 1.5rem; }
+    .nav-links { display: none; }
+    section, #hero { padding: 4rem 1.5rem; }
+    #hero { padding-top: 6rem; }
+    .hero-stats { position: static; flex-direction: row; flex-wrap: wrap; gap: 2rem; margin-top: 3rem; }
+    .about-grid, .contact-grid { grid-template-columns: 1fr; gap: 2rem; }
+    .exp-item { grid-template-columns: 1fr; gap: 0.5rem; }
+    footer { flex-direction: column; gap: 0.5rem; text-align: center; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a class="nav-logo" href="#hero">Orpheus Manga<span>.</span></a>
+  <ul class="nav-links">
+    <li><a href="#about">About</a></li>
+    <li><a href="#experience">Experience</a></li>
+    <li><a href="#projects">Projects</a></li>
+    <li><a href="#skills">Skills</a></li>
+    <li><a href="#certs">Certifications</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+  <a class="nav-cta" href="mailto:o.manga@alustudent.com">Hire Me</a>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-bg-orb orb1"></div>
+  <div class="hero-bg-orb orb2"></div>
+
+  <p class="hero-eyebrow">Python Backend &amp; AI Developer · Kigali, Rwanda</p>
+
+  <h1>
+    Building backends<br>
+    that <span class="accent-word">think</span>,<br>
+    <span class="line-muted">scale, and ship.</span>
+  </h1>
+
+  <p class="hero-sub">
+    Final-year Software Engineering student at African Leadership University, specialising in ML.
+    I build production-grade Django &amp; FastAPI systems, integrate AI/ML pipelines, and ship mobile apps across real-world use cases.
+  </p>
+
+  <div class="hero-chips">
+    <span class="chip hi">Python</span>
+    <span class="chip hi">Django</span>
+    <span class="chip hi">FastAPI</span>
+    <span class="chip hi">PyTorch</span>
+    <span class="chip hi">Hugging Face</span>
+    <span class="chip">Flutter</span>
+    <span class="chip">PostgreSQL</span>
+    <span class="chip">Docker</span>
+    <span class="chip">GCP</span>
+    <span class="chip">RL / Stable Baselines3</span>
+  </div>
+
+  <div class="hero-actions">
+    <a class="btn-primary" href="#projects">View Projects</a>
+    <a class="btn-ghost" href="#contact">Get in Touch</a>
+    <a class="btn-ghost" href="https://github.com/mangaorphy" target="_blank">GitHub ↗</a>
+  </div>
+
+  <div class="hero-stats">
+    <div class="stat-item">
+      <div class="stat-num">4.41<span>/5</span></div>
+      <div class="stat-label">CGPA · ALU</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-num">380<span>cr</span></div>
+      <div class="stat-label">Credits Earned</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-num">4<span>+</span></div>
+      <div class="stat-label">Internships</div>
+    </div>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section id="about">
+  <div class="about-grid">
+    <div class="about-text reveal">
+      <div class="section-label">About Me</div>
+      <h2>Code meets<br>African context.</h2>
+      <p>
+        I'm <strong>Orpheus Mhizha Manga</strong>, a final-year BSc Software Engineering (ML Specialisation) student at African Leadership University in Kigali, Rwanda.
+      </p>
+      <p>
+        My work sits at the intersection of <strong>backend engineering and applied AI</strong> — from building Django REST services with PyTorch disease detection to training reinforcement learning agents on custom Gymnasium environments, and writing NLP pipelines for African clinical text.
+      </p>
+      <p>
+        I care deeply about technology that matters in African contexts: farmers diagnosing plant diseases via a mobile app, healthcare data privacy pipelines, wildlife conservation analytics, and students learning robotics.
+      </p>
+      <p>
+        Currently a <strong>Research Assistant at Rizivo Research Lab, ALU</strong>, targeting a peer-reviewed publication in 2026 on LLM-driven synthetic clinical data generation for African contexts.
+      </p>
+      <div class="about-cgpa">
+        <span class="cgpa-num">4.41</span>
+        <span class="cgpa-denom">/ 5.0</span>
+        <span class="cgpa-label">CGPA · BSc Software Engineering</span>
+      </div>
+    </div>
+
+    <div class="reveal" style="transition-delay:0.1s">
+      <div class="grades-panel">
+        <div class="grades-header">
+          <span><span class="dot"></span>Academic Transcript · ALU</span>
+          <span>380 / 380 Credits</span>
+        </div>
+        <div class="grades-scroll">
+          <table>
+            <thead>
+              <tr>
+                <th>Course</th>
+                <th>Grade</th>
+                <th style="width:100px;">Bar</th>
+              </tr>
+            </thead>
+            <tbody id="gradesBody">
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- EXPERIENCE -->
+<section id="experience">
+  <div class="section-label reveal">Experience</div>
+  <h2 class="reveal">Where I've shipped real work.</h2>
+
+  <div class="exp-list">
+
+    <div class="exp-item reveal">
+      <div>
+        <div class="exp-date">Jan 2026 – Present</div>
+        <div class="exp-date exp-location">Kigali, Rwanda</div>
+      </div>
+      <div>
+        <div class="exp-role">Research Assistant</div>
+        <div class="exp-company">Rizivo Research Lab · African Leadership University</div>
+        <ul class="exp-bullets">
+          <li>Built <strong>Python OOP pipelines</strong> for clinical text preprocessing, calling Hugging Face APIs to detect and redact <strong>18 categories</strong> of personal identifiers from medical records.</li>
+          <li>Designed an <strong>LLM-driven synthetic data generation pipeline</strong> for African clinical contexts — targeting peer-reviewed publication in 2026.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="exp-item reveal">
+      <div>
+        <div class="exp-date">Aug – Dec 2025</div>
+        <div class="exp-date exp-location">Remote</div>
+      </div>
+      <div>
+        <div class="exp-role">AI Developer Intern</div>
+        <div class="exp-company">ThinkGreen Africa</div>
+        <ul class="exp-bullets">
+          <li>Built a <strong>Python FastAPI REST service</strong> for real-time candidate ranking, achieving <strong>92% accuracy</strong> and cutting recruiter screening time by <strong>40%</strong>.</li>
+          <li>Managed codebase with Git — branches, pull requests, and code reviews across a remote team of 4 developers.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="exp-item reveal">
+      <div>
+        <div class="exp-date">Jan – Apr 2025</div>
+        <div class="exp-date exp-location">Kenya (Remote)</div>
+      </div>
+      <div>
+        <div class="exp-role">Backend Developer Intern</div>
+        <div class="exp-company">Beam Social Hub</div>
+        <ul class="exp-bullets">
+          <li>Shipped <strong>REST API endpoints</strong> for real-time notifications and email flows, increasing user engagement by <strong>35%</strong> and email open rates by <strong>28%</strong>.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="exp-item reveal">
+      <div>
+        <div class="exp-date">2025</div>
+        <div class="exp-date exp-location">Shangani, Zimbabwe</div>
+      </div>
+      <div>
+        <div class="exp-role">Data Research Intern</div>
+        <div class="exp-company">Shangani Holistic (OGRC)</div>
+        <ul class="exp-bullets">
+          <li>Analysed wildlife data using <strong>R and QGIS</strong> to support anti-poaching operations; mapped ecological resources and collected field data on bush encroachment.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="exp-item reveal">
+      <div>
+        <div class="exp-date">2024 – 2025</div>
+        <div class="exp-date exp-location">Nyagatare, Rwanda</div>
+      </div>
+      <div>
+        <div class="exp-role">Robotics Mentor</div>
+        <div class="exp-company">FIRST LEGO League</div>
+        <ul class="exp-bullets">
+          <li>Trained <strong>30+ students</strong> in Mindstorms programming, advancing <strong>5 teams</strong> to national finals; served as judge at the national competition.</li>
+        </ul>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- PROJECTS -->
+<section id="projects">
+  <div class="section-label reveal">Projects</div>
+  <h2 class="reveal">Things I've built and shipped.</h2>
+
+  <div class="projects-grid">
+
+    <div class="project-card reveal">
+      <div class="project-highlight"></div>
+      <div class="project-card-top">
+        <div class="project-number">
+          <span>01 / PlantGuardAI</span>
+          <span class="project-status status-live">Live App</span>
+        </div>
+        <div class="project-name">PlantGuard AI</div>
+        <p class="project-desc">Production Flutter/Dart Android app with AI plant disease detection for farmers. Ships with e-commerce, MTN Mobile Money payments, and a 4-language interface. Firebase Auth, Firestore, Provider/BLoC state management.</p>
+      </div>
+      <div class="project-card-bottom">
+        <div class="project-tags">
+          <span class="tag">Flutter</span><span class="tag">Dart</span><span class="tag">Firebase</span>
+          <span class="tag">BLoC</span><span class="tag">AI Detection</span><span class="tag">Mobile Money</span>
+        </div>
+        <div class="project-links">
+          <a class="project-link" href="https://github.com/mangaorphy/PlantGuardAI" target="_blank">GitHub</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="project-card reveal" style="transition-delay:0.1s">
+      <div class="project-highlight"></div>
+      <div class="project-card-top">
+        <div class="project-number">
+          <span>02 / TogetherSO</span>
+          <span class="project-status status-live">Django · PyTorch</span>
+        </div>
+        <div class="project-name">TogetherSO</div>
+        <p class="project-desc">Django web app where farmers upload leaf images for real-time disease predictions via a PyTorch CNN — 38 disease classes across 14 crops. Integrated REST API views, PostgreSQL, SMTP email gateway.</p>
+      </div>
+      <div class="project-card-bottom">
+        <div class="project-tags">
+          <span class="tag">Python</span><span class="tag">Django</span><span class="tag">PyTorch</span>
+          <span class="tag">PostgreSQL</span><span class="tag">CNN</span><span class="tag">REST API</span>
+        </div>
+        <div class="project-links">
+          <a class="project-link" href="https://github.com/mangaorphy/TogetherSO" target="_blank">GitHub</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="project-card reveal" style="transition-delay:0.15s">
+      <div class="project-highlight"></div>
+      <div class="project-card-top">
+        <div class="project-number">
+          <span>03 / Savanna RL</span>
+          <span class="project-status status-research">Research</span>
+        </div>
+        <div class="project-name">Savanna Acoustic Threat Detection</div>
+        <p class="project-desc">Custom Gymnasium environment (847-dim obs space) on a 20×20 savanna grid. Trained DQN, PPO, A2C, REINFORCE across 40 hyperparameter sweeps — DQN achieved mean reward 50.53 with a live OpenGL 3D renderer.</p>
+      </div>
+      <div class="project-card-bottom">
+        <div class="project-tags">
+          <span class="tag">Python</span><span class="tag">Stable Baselines3</span><span class="tag">Gymnasium</span>
+          <span class="tag">PyTorch</span><span class="tag">DQN</span><span class="tag">PPO</span><span class="tag">OpenGL</span>
+        </div>
+        <div class="project-links">
+          <a class="project-link" href="https://github.com/mangaorphy/orpheus_reinforcement_learning_summative" target="_blank">GitHub</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="project-card reveal" style="transition-delay:0.2s">
+      <div class="project-highlight"></div>
+      <div class="project-card-top">
+        <div class="project-number">
+          <span>04 / Legal AI</span>
+          <span class="project-status status-research">Fine-tuned LLM</span>
+        </div>
+        <div class="project-name">Domain-Specific Legal AI</div>
+        <p class="project-desc">Fine-tuned language model specialised for legal document understanding. Domain-specific adaptation using PEFT/LoRA techniques for African legal contexts.</p>
+      </div>
+      <div class="project-card-bottom">
+        <div class="project-tags">
+          <span class="tag">Hugging Face</span><span class="tag">PEFT</span><span class="tag">LoRA</span>
+          <span class="tag">Transformers</span><span class="tag">NLP</span>
+        </div>
+        <div class="project-links">
+          <a class="project-link" href="https://github.com/mangaorphy/Domain-Specific-FIned-Tuned-Legal-AI" target="_blank">GitHub</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="project-card reveal" style="transition-delay:0.25s">
+      <div class="project-highlight"></div>
+      <div class="project-card-top">
+        <div class="project-number">
+          <span>05 / Air Quality RNN</span>
+          <span class="project-status status-research">ML Research</span>
+        </div>
+        <div class="project-name">Air Quality RNN</div>
+        <p class="project-desc">Recurrent neural network for air quality time-series prediction. Applies ML techniques including data preprocessing, sequence modelling, and evaluation of predictive accuracy across pollutant categories.</p>
+      </div>
+      <div class="project-card-bottom">
+        <div class="project-tags">
+          <span class="tag">Python</span><span class="tag">RNN</span><span class="tag">PyTorch</span>
+          <span class="tag">Time Series</span><span class="tag">Pandas</span><span class="tag">NumPy</span>
+        </div>
+        <div class="project-links">
+          <a class="project-link" href="https://github.com/mangaorphy/Machine-Learning-Techniques-AIR-QUALITY-RNN" target="_blank">GitHub</a>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- SKILLS -->
+<section id="skills">
+  <div class="section-label reveal">Skills</div>
+  <h2 class="reveal">Technical stack.</h2>
+
+  <div class="skills-grid">
+    <div class="skill-group reveal">
+      <div class="skill-group-title">Python Backend</div>
+      <div class="skill-items">
+        <span class="skill-pill">Django</span>
+        <span class="skill-pill">FastAPI</span>
+        <span class="skill-pill">Flask</span>
+        <span class="skill-pill">REST API Design</span>
+        <span class="skill-pill">OOP Python 3.9+</span>
+      </div>
+    </div>
+    <div class="skill-group reveal" style="transition-delay:0.05s">
+      <div class="skill-group-title">AI / ML</div>
+      <div class="skill-items">
+        <span class="skill-pill">PyTorch</span>
+        <span class="skill-pill">Hugging Face</span>
+        <span class="skill-pill">PEFT / LoRA</span>
+        <span class="skill-pill">scikit-learn</span>
+        <span class="skill-pill">Transformers</span>
+      </div>
+    </div>
+    <div class="skill-group reveal" style="transition-delay:0.1s">
+      <div class="skill-group-title">RL / Research</div>
+      <div class="skill-items">
+        <span class="skill-pill">Stable Baselines3</span>
+        <span class="skill-pill">DQN · PPO · A2C</span>
+        <span class="skill-pill">Gymnasium</span>
+        <span class="skill-pill">R</span>
+        <span class="skill-pill">QGIS</span>
+      </div>
+    </div>
+    <div class="skill-group reveal" style="transition-delay:0.15s">
+      <div class="skill-group-title">Mobile</div>
+      <div class="skill-items">
+        <span class="skill-pill">Flutter</span>
+        <span class="skill-pill">Dart</span>
+        <span class="skill-pill">Firebase</span>
+        <span class="skill-pill">Provider</span>
+        <span class="skill-pill">BLoC</span>
+      </div>
+    </div>
+    <div class="skill-group reveal" style="transition-delay:0.2s">
+      <div class="skill-group-title">Databases</div>
+      <div class="skill-items">
+        <span class="skill-pill">PostgreSQL</span>
+        <span class="skill-pill">MySQL</span>
+        <span class="skill-pill">MongoDB</span>
+        <span class="skill-pill">Django ORM</span>
+      </div>
+    </div>
+    <div class="skill-group reveal" style="transition-delay:0.25s">
+      <div class="skill-group-title">DevOps & Tools</div>
+      <div class="skill-items">
+        <span class="skill-pill">Git / GitHub</span>
+        <span class="skill-pill">Docker</span>
+        <span class="skill-pill">GCP</span>
+        <span class="skill-pill">Linux</span>
+        <span class="skill-pill">Node.js</span>
+        <span class="skill-pill">Pandas · NumPy</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CERTIFICATIONS -->
+<section id="certs">
+  <div class="section-label reveal">Certifications</div>
+  <h2 class="reveal">Credentials &amp; recognition.</h2>
+
+  <div class="certs-grid">
+    <div class="cert-card reveal">
+      <div class="cert-issuer">Meta · Coursera</div>
+      <div class="cert-name">Backend Development Professional Certificate</div>
+    </div>
+    <div class="cert-card reveal" style="transition-delay:0.05s">
+      <div class="cert-issuer">DeepLearning.AI</div>
+      <div class="cert-name">Neural Networks &amp; Deep Learning</div>
+    </div>
+    <div class="cert-card reveal" style="transition-delay:0.1s">
+      <div class="cert-issuer">DeepLearning.AI</div>
+      <div class="cert-name">Linear Algebra for Machine Learning</div>
+    </div>
+    <div class="cert-card reveal" style="transition-delay:0.15s">
+      <div class="cert-issuer">IBM · Coursera</div>
+      <div class="cert-name">Flutter &amp; Dart Mobile Development</div>
+    </div>
+    <div class="cert-card reveal" style="transition-delay:0.2s">
+      <div class="cert-issuer">ALX</div>
+      <div class="cert-name">AI Career Essentials</div>
+    </div>
+    <div class="cert-card reveal" style="transition-delay:0.25s">
+      <div class="cert-issuer">Brainaics</div>
+      <div class="cert-name">Python Programming &amp; Version Control</div>
+    </div>
+  </div>
+
+  <div class="achievement-banner reveal" style="transition-delay:0.1s">
+    <div class="achievement-medal">🥉</div>
+    <div class="achievement-text">
+      <h3>3rd Place — CodeXtreme 2026 · Team TerraFoma</h3>
+      <p>Built an AI-powered solution for environmental challenges under 24-hour hackathon constraints.</p>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact">
+  <div class="contact-grid">
+    <div class="contact-left reveal">
+      <div class="section-label">Contact</div>
+      <h2>Let's build something remarkable.</h2>
+      <p>Open to apprenticeships, internships, graduate roles, and research collaborations. Based in Kigali, Rwanda — available remotely.</p>
+
+      <div class="contact-links">
+        <a class="contact-link" href="mailto:o.manga@alustudent.com">
+          <span class="contact-link-icon">✉</span>
+          <div>
+            <span class="contact-link-label">Email</span>
+            o.manga@alustudent.com
+          </div>
+        </a>
+        <a class="contact-link" href="tel:+250792957530">
+          <span class="contact-link-icon">📞</span>
+          <div>
+            <span class="contact-link-label">Phone · WhatsApp</span>
+            +250 792 957 530
+          </div>
+        </a>
+        <a class="contact-link" href="https://github.com/mangaorphy" target="_blank">
+          <span class="contact-link-icon">⌥</span>
+          <div>
+            <span class="contact-link-label">GitHub</span>
+            github.com/mangaorphy
+          </div>
+        </a>
+        <a class="contact-link" href="https://www.linkedin.com/in/orpheus-manga-13ab76290/" target="_blank">
+          <span class="contact-link-icon">in</span>
+          <div>
+            <span class="contact-link-label">LinkedIn</span>
+            linkedin.com/in/orpheus-manga
+          </div>
+        </a>
+      </div>
+    </div>
+
+    <div class="contact-right reveal" style="transition-delay:0.1s">
+      <h3>Open to opportunities</h3>
+      <p>Currently available for the following types of roles:</p>
+      <div class="open-to">
+        <div class="open-item">Apprenticeship Programmes</div>
+        <div class="open-item">Backend / AI Developer Roles</div>
+        <div class="open-item">Research Collaborations (NLP, RL, Clinical AI)</div>
+        <div class="open-item">Part-time / Remote Internships</div>
+        <div class="open-item">Open-source Contributions</div>
+      </div>
+
+      <br>
+      <p style="margin-top:1.5rem">Location: <strong style="color:var(--text)">Kigali, Rwanda</strong> · Available remotely worldwide</p>
+      <p>Graduation: <strong style="color:var(--text)">August 2026</strong> · BSc Software Engineering (ML)</p>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <span>© 2026 Orpheus Mhizha Manga · Kigali, Rwanda</span>
+  <span style="font-family:'DM Mono',monospace;font-size:0.65rem;color:var(--muted)">Python · Django · PyTorch · Flutter · Research</span>
+</footer>
+
+<script>
+// ── GRADES DATA ──
+const grades = [
+  { course: 'Introduction to Python Programming & Databases', grade: 99.63 },
+  { course: 'Introduction to Linux and IT Tools', grade: 98.91 },
+  { course: 'Frontend Web Development', grade: 97.13 },
+  { course: 'Web Infrastructure', grade: 96.92 },
+  { course: 'Machine Learning Pipeline', grade: 92.75 },
+  { course: 'Reflective Thinking', grade: 93.23 },
+  { course: 'Enterprise Web Development', grade: 93.35 },
+  { course: 'Mathematics for Machine Learning', grade: 89.48 },
+  { course: 'Introduction to Software Engineering', grade: 87.08 },
+  { course: 'Foundations Project', grade: 86.13 },
+  { course: 'Learning Processes', grade: 85.60 },
+  { course: 'Mobile Application Development', grade: 83.70 },
+  { course: 'Self Leadership & Team Dynamics', grade: 84.78 },
+  { course: 'Introduction to Machine Learning', grade: 87.18 },
+  { course: 'Skills Immersion 1', grade: 77.60 },
+  { course: 'Communicating for Impact', grade: 76.57 },
+  { course: 'Responsible Enterprise', grade: 69.55 },
+];
+
+const tbody = document.getElementById('gradesBody');
+grades.forEach(g => {
+  const hi = g.grade >= 90;
+  const row = document.createElement('tr');
+  row.innerHTML = `
+    <td>${g.course}</td>
+    <td class="grade-num">${g.grade.toFixed(2)}</td>
+    <td>
+      <div class="grade-bar-wrap">
+        <div class="grade-bar-bg">
+          <div class="grade-bar ${hi ? 'hi' : ''}" style="width:${g.grade}%"></div>
+        </div>
+      </div>
+    </td>
+  `;
+  tbody.appendChild(row);
+});
+
+// ── SCROLL REVEAL ──
+const reveals = document.querySelectorAll('.reveal');
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      e.target.classList.add('visible');
+      observer.unobserve(e.target);
+    }
+  });
+}, { threshold: 0.1 });
+reveals.forEach(el => observer.observe(el));
+</script>
+</body>
+</html>
