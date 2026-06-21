@@ -12,11 +12,11 @@
     --surface: #111118;
     --surface2: #16161f;
     --border: rgba(255,255,255,0.07);
-    --text: #e8e6f0;
-    --muted: #6b6880;
-    --accent: #7c6af7;
-    --accent2: #3de0a0;
-    --accent3: #f5a623;
+    --text: #f3f1fa;
+    --muted: #a6a2bd;
+    --accent: #9580ff;
+    --accent2: #4dedab;
+    --accent3: #f9b13f;
     --glow: rgba(124,106,247,0.15);
   }
 
@@ -149,10 +149,10 @@
   h1 .accent-word { color: var(--accent); position: relative; display: inline-block; }
 
   .hero-sub {
-    font-size: 1.1rem;
+    font-size: 1.18rem;
     color: var(--muted);
-    max-width: 520px;
-    line-height: 1.8;
+    max-width: 560px;
+    line-height: 1.85;
     margin-bottom: 3rem;
     font-style: italic;
   }
@@ -283,7 +283,7 @@
   .about-text p {
     color: var(--muted);
     margin-bottom: 1.2rem;
-    font-size: 1rem;
+    font-size: 1.05rem;
   }
   .about-text strong { color: var(--text); font-style: normal; }
 
@@ -425,7 +425,7 @@
   }
   .exp-bullets { list-style: none; }
   .exp-bullets li {
-    font-size: 0.9rem;
+    font-size: 0.98rem;
     color: var(--muted);
     margin-bottom: 0.5rem;
     padding-left: 1.2rem;
@@ -497,9 +497,9 @@
   }
 
   .project-desc {
-    font-size: 0.88rem;
+    font-size: 0.95rem;
     color: var(--muted);
-    line-height: 1.7;
+    line-height: 1.75;
   }
 
   .project-card-bottom { padding: 1.2rem 1.8rem; }
@@ -785,6 +785,7 @@
     <li><a href="#skills">Skills</a></li>
     <li><a href="#certs">Certifications</a></li>
     <li><a href="#contact">Contact</a></li>
+    <li><a href="Orpheus_Manga_Mhizha_Resume.pdf" target="_blank">Résumé</a></li>
   </ul>
   <a class="nav-cta" href="mailto:o.manga@alustudent.com">Hire Me</a>
 </nav>
@@ -822,6 +823,7 @@
 
   <div class="hero-actions">
     <a class="btn-primary" href="#projects">View Projects</a>
+    <a class="btn-ghost" href="Orpheus_Manga_Mhizha_Resume.pdf" target="_blank" download>Download Résumé ↓</a>
     <a class="btn-ghost" href="#contact">Get in Touch</a>
     <a class="btn-ghost" href="https://github.com/mangaorphy" target="_blank">GitHub ↗</a>
   </div>
@@ -849,7 +851,7 @@
       <div class="section-label">About Me</div>
       <h2>Code meets<br>African context.</h2>
       <p>
-        I'm <strong>Orpheus Mhizha Manga</strong>, a final-year BSc Software Engineering (ML Specialisation) student at African Leadership University in Kigali, Rwanda.
+        I'm <strong>Orpheus Mhizha Manga</strong>, originally from <strong>Zimbabwe</strong> and now a final-year BSc Software Engineering (ML Specialisation) student at African Leadership University in Kigali, Rwanda.
       </p>
       <p>
         My work sits at the intersection of <strong>backend engineering and applied AI</strong> — from building Django REST services with PyTorch disease detection to training reinforcement learning agents on custom Gymnasium environments, and writing NLP pipelines for African clinical text.
@@ -984,7 +986,49 @@
       <div class="project-highlight"></div>
       <div class="project-card-top">
         <div class="project-number">
-          <span>01 / PlantGuardAI</span>
+          <span>01 / Alertreck</span>
+          <span class="project-status status-live">Edge AI · Deployed</span>
+        </div>
+        <div class="project-name">Alertreck — Edge-AI Anti-Poaching</div>
+        <p class="project-desc">Real-time acoustic threat detection (gunshots, chainsaws, vehicles, voices) running fully offline on a Raspberry Pi 4 via ONNX Runtime. Custom CNN at <strong>92.64% accuracy</strong>, F1 ≥ 0.997 on gunshots, trained over a 5-model / 4-paradigm comparative study on 7,900+ audio files. GPS-tagged SMS alerts via SIM808 + a Flask Grad-CAM dashboard.</p>
+      </div>
+      <div class="project-card-bottom">
+        <div class="project-tags">
+          <span class="tag">Python</span><span class="tag">PyTorch</span><span class="tag">CNN</span>
+          <span class="tag">ONNX</span><span class="tag">Raspberry Pi</span><span class="tag">librosa</span><span class="tag">Flask</span>
+        </div>
+        <div class="project-links">
+          <a class="project-link" href="https://github.com/mangaorphy/alertreck" target="_blank">GitHub</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="project-card reveal" style="transition-delay:0.05s">
+      <div class="project-highlight"></div>
+      <div class="project-card-top">
+        <div class="project-number">
+          <span>02 / LexRwanda</span>
+          <span class="project-status status-live">RAG · Deployed</span>
+        </div>
+        <div class="project-name">LexRwanda — AI Legal Assistant</div>
+        <p class="project-desc">Production Retrieval-Augmented Generation system giving Rwandan citizens plain-language answers about their legal rights, grounded in <strong>200+ indexed constitutional articles</strong> via semantic search (bge embeddings) and Claude. Full-stack deploy with streaming responses, source citations, and confidence scoring.</p>
+      </div>
+      <div class="project-card-bottom">
+        <div class="project-tags">
+          <span class="tag">Python</span><span class="tag">FastAPI</span><span class="tag">ChromaDB</span>
+          <span class="tag">Claude API</span><span class="tag">Next.js</span><span class="tag">RAG</span>
+        </div>
+        <div class="project-links">
+          <a class="project-link" href="https://github.com/mangaorphy/LexRwanda" target="_blank">GitHub</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="project-card reveal" style="transition-delay:0.1s">
+      <div class="project-highlight"></div>
+      <div class="project-card-top">
+        <div class="project-number">
+          <span>03 / PlantGuardAI</span>
           <span class="project-status status-live">Live App</span>
         </div>
         <div class="project-name">PlantGuard AI</div>
@@ -1005,7 +1049,7 @@
       <div class="project-highlight"></div>
       <div class="project-card-top">
         <div class="project-number">
-          <span>02 / TogetherSO</span>
+          <span>04 / TogetherSO</span>
           <span class="project-status status-live">Django · PyTorch</span>
         </div>
         <div class="project-name">TogetherSO</div>
@@ -1026,7 +1070,7 @@
       <div class="project-highlight"></div>
       <div class="project-card-top">
         <div class="project-number">
-          <span>03 / Savanna RL</span>
+          <span>05 / Savanna RL</span>
           <span class="project-status status-research">Research</span>
         </div>
         <div class="project-name">Savanna Acoustic Threat Detection</div>
@@ -1047,7 +1091,7 @@
       <div class="project-highlight"></div>
       <div class="project-card-top">
         <div class="project-number">
-          <span>04 / Legal AI</span>
+          <span>06 / Legal AI</span>
           <span class="project-status status-research">Fine-tuned LLM</span>
         </div>
         <div class="project-name">Domain-Specific Legal AI</div>
@@ -1068,7 +1112,7 @@
       <div class="project-highlight"></div>
       <div class="project-card-top">
         <div class="project-number">
-          <span>05 / Air Quality RNN</span>
+          <span>07 / Air Quality RNN</span>
           <span class="project-status status-research">ML Research</span>
         </div>
         <div class="project-name">Air Quality RNN</div>
@@ -1235,6 +1279,13 @@
             linkedin.com/in/orpheus-manga
           </div>
         </a>
+        <a class="contact-link" href="Orpheus_Manga_Mhizha_Resume.pdf" target="_blank" download>
+          <span class="contact-link-icon">📄</span>
+          <div>
+            <span class="contact-link-label">Résumé · PDF</span>
+            Download my résumé
+          </div>
+        </a>
       </div>
     </div>
 
@@ -1251,6 +1302,7 @@
 
       <br>
       <p style="margin-top:1.5rem">Location: <strong style="color:var(--text)">Kigali, Rwanda</strong> · Available remotely worldwide</p>
+      <p>Originally from <strong style="color:var(--text)">Zimbabwe</strong> 🇿🇼</p>
       <p>Graduation: <strong style="color:var(--text)">August 2026</strong> · BSc Software Engineering (ML)</p>
     </div>
   </div>
