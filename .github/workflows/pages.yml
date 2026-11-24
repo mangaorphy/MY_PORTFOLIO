@@ -1,4 +1,5 @@
 name: Deploy portfolio to GitHub Pages
+# Publishes only the portfolio/ folder. Pages source must be set to "GitHub Actions".
 
 on:
   push:
