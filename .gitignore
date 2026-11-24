@@ -1,0 +1,11 @@
+# Private application material: kept local, never pushed (this repo is public)
+applications/
+reference/
+*.Training-facilitator*
+Training-facilitator-*.pdf
+
+# Local tooling
+.venv/
+.claude/
+.DS_Store
+__pycache__/
